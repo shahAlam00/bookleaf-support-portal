@@ -11,3 +11,4 @@ export const KNOWLEDGE_BASE = [
 
 export const CATEGORIES = ['Royalty & Payments', 'ISBN & Metadata Issues', 'Printing & Quality', 'Distribution & Availability', 'Book Status & Production Updates', 'General Inquiry'];
 export const PRIORITIES = ['Critical', 'High', 'Medium', 'Low'];
+  
