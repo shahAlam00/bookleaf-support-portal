@@ -7,7 +7,7 @@ const client = env.OPENAI_API_KEY
   ? new OpenAI({
       apiKey: env.OPENAI_API_KEY,
       baseURL: env.OPENAI_BASE_URL,
-    })
+    }) 
   : null;
 if (!client) console.warn('[AI] OPENAI_API_KEY not set — AI features disabled, using rule-based fallback');
 
