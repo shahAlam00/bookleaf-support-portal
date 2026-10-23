@@ -15,9 +15,7 @@ export class ApiError extends Error {
   }
 }
 
-export class ApiError extends Error {
-  constructor(message, status = 0, payload = null) { super(message); this.status = status; this.payload = payload; }
-}
+
 
 export async function api(path, { method = 'GET', token, body, query, signal } = {}) {
   const url = new URL(`${API_BASE}${path.startsWith('/') ? path : `/${path}`}`);
