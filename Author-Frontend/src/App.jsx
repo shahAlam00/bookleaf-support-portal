@@ -66,12 +66,12 @@ function Login() {
     catch (err) { toastError(err, notify); } finally { setLoading(false); }
   }
   return <main className="login-shell">
-    <div className="login-art"><div className="brand brand-light"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">PUBLISHING SUPPORT</span></span></div>
+    <div className="login-art"><div className="brand brand-light"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">AUTHOR PORTAL</span></span></div>
       <div className="art-copy"><div className="eyebrow eyebrow-light"><Sparkles size={14}/> AUTHOR EXPERIENCE, REIMAGINED</div><h1>Every story deserves<br/><em>great support.</em></h1><p>View your books and royalties, raise support requests, and follow every response in one place.</p>
         <div className="art-stats"><div><strong>22k+</strong><span>Titles supported</span></div><div><strong>1,200+</strong><span>Books monthly</span></div><div><strong>One place</strong><span>For every question</span></div></div>
       </div><div className="art-orb orb-one"/><div className="art-orb orb-two"/><div className="art-footer">© {new Date().getFullYear()} BookLeaf Publishing <span>•</span> Author Support Portal</div>
     </div>
-    <div className="login-side"><div className="login-mobile-brand brand"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">PUBLISHING SUPPORT</span></span></div>
+    <div className="login-side"><div className="login-mobile-brand brand"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">AUTHOR PORTAL</span></span></div>
       <div className="login-card"><div className="login-icon"><ShieldCheck size={23}/></div><div className="eyebrow">SECURE PORTAL</div><h2>Welcome back</h2><p className="muted">Sign in with the email registered for your author account.</p>
         <form onSubmit={submit} className="form-stack"><label>Email address<div className="input-wrap"><UserRound size={17}/><input type="email" required autoComplete="username" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)}/></div></label>
           <label>Password<div className="input-wrap"><ShieldCheck size={17}/><input type={showPassword ? 'text' : 'password'} required autoComplete="current-password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}/><button className="input-action" type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Hide' : 'Show'}</button></div></label>
