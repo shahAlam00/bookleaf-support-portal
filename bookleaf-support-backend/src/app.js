@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
 if (env.NODE_ENV !== 'test') app.use(morgan('dev'));
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-7', legacyHeaders: false }));
-app.get('/api/health', (_req, res) => res.json({ success: true, message: 'BookLeaf API is healthy', timestamp: new Date().toISOString() }));
+app.get('/', (_req, res) => res.json({ success: true, message: 'BookLeaf API is healthy', timestamp: new Date().toISOString() }));
 app.use('/api/auth', authRoutes);
 app.use('/api/authors', authorRoutes);
 app.use('/api/books', bookRoutes);

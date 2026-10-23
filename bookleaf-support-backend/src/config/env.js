@@ -16,7 +16,10 @@ const envSchema = z.object({
   ADMIN_NAME: z.string().default('BookLeaf Admin'),
   ADMIN_EMAIL: z.string().email().default('admin@bookleaf.local'),
   ADMIN_PASSWORD: z.string().min(8).default('Admin@12345'),
-  AUTHOR_DEFAULT_PASSWORD: z.string().min(8).default('Author@12345')
+  AUTHOR_DEFAULT_PASSWORD: z.string().min(8).default('Author@12345'),
+  OPENAI_BASE_URL: z.string()
+  .url()
+  .default('https://generativelanguage.googleapis.com/v1beta/openai/'),
 });
 
 const parsed = envSchema.safeParse(process.env);
