@@ -1,0 +1,11 @@
+import { asyncHandler } from '../../utils/asyncHandler.js';
+import * as service from './ticket.service.js';
+export const create = asyncHandler(async (req, res) => res.status(201).json({ success: true, data: await service.createTicket(req.user, req.body) }));
+export const myTickets = asyncHandler(async (req, res) => res.json({ success: true, data: await service.listMyTickets(req.user, req.query) }));
+export const getById = asyncHandler(async (req, res) => res.json({ success: true, data: await service.getTicket(req.params.id, req.user) }));
+export const adminList = asyncHandler(async (req, res) => res.json({ success: true, data: await service.listAdminTickets(req.query) }));
+export const update = asyncHandler(async (req, res) => res.json({ success: true, data: await service.updateTicket(req.params.id, req.user, req.body) }));
+export const reply = asyncHandler(async (req, res) => res.status(201).json({ success: true, data: await service.addReply(req.params.id, req.user, req.body.message) }));
+export const addNote = asyncHandler(async (req, res) => res.status(201).json({ success: true, data: await service.addInternalNote(req.params.id, req.user, req.body.note) }));
+export const draft = asyncHandler(async (req, res) => res.json({ success: true, data: await service.getDraft(req.params.id) }));
+export const dashboard = asyncHandler(async (_req, res) => res.json({ success: true, data: await service.dashboardSummary() }));

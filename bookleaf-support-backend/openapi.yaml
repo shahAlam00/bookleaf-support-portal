@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: BookLeaf Author Support API
+  version: 1.0.0
+  description: REST API for author books, support tickets and AI-assisted admin replies.
+servers:
+  - url: http://localhost:5000/api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string }
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: API is healthy }
+  /auth/login:
+    post:
+      summary: Login as an author or admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200': { description: JWT and current user }
+        '401': { description: Invalid credentials }
+  /auth/me:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Current account
+      responses:
+        '200': { description: Account details }
+  /authors/me:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Current author profile
+      responses:
+        '200': { description: Author profile }
+  /books/my-books:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Books belonging to the logged-in author
+      responses:
+        '200': { description: Author books }
+  /tickets:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Create a support ticket (author)
+      responses:
+        '201': { description: Created ticket; AI failure does not prevent creation }
+  /tickets/my-tickets:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: List the current author's tickets
+      responses:
+        '200': { description: Paginated tickets }
+  /tickets/{id}:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Get a ticket and its messages; author ownership is enforced
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Ticket detail }
+        '403': { description: Not allowed }
+  /tickets/admin/tickets:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Admin ticket queue; supports status, category, priority, authorId, from, to, search, page, limit
+      responses:
+        '200': { description: Paginated ticket queue }
+  /tickets/admin/dashboard:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Admin ticket summary
+      responses:
+        '200': { description: Dashboard summary }
+  /tickets/admin/tickets/{id}:
+    patch:
+      security: [{ bearerAuth: [] }]
+      summary: Update ticket status/category/priority or assign to self
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Updated ticket }
+  /tickets/admin/tickets/{id}/draft:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Generate a response draft; does not send it
+      responses:
+        '200': { description: Draft and aiGenerated flag }
+  /tickets/admin/tickets/{id}/reply:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Send a public admin reply
+      responses:
+        '201': { description: Reply created }
+  /tickets/admin/tickets/{id}/notes:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Add an internal admin-only note
+      responses:
+        '201': { description: Internal note added }

@@ -1,0 +1,17 @@
+import { Router } from 'express';
+import { authenticate, authorize } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { createTicketSchema, replySchema, noteSchema, updateTicketSchema } from './ticket.validation.js';
+import * as controller from './ticket.controller.js';
+const router = Router();
+router.use(authenticate);
+router.get('/my-tickets', authorize('author'), controller.myTickets);
+router.post('/', authorize('author'), validate(createTicketSchema), controller.create);
+router.get('/:id', controller.getById);
+router.get('/admin/tickets', authorize('admin'), controller.adminList);
+router.get('/admin/dashboard', authorize('admin'), controller.dashboard);
+router.patch('/admin/tickets/:id', authorize('admin'), validate(updateTicketSchema), controller.update);
+router.post('/admin/tickets/:id/draft', authorize('admin'), controller.draft);
+router.post('/admin/tickets/:id/reply', authorize('admin'), validate(replySchema), controller.reply);
+router.post('/admin/tickets/:id/notes', authorize('admin'), validate(noteSchema), controller.addNote);
+export default router;
