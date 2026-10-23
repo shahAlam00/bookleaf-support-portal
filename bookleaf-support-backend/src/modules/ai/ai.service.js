@@ -6,7 +6,7 @@ import { KNOWLEDGE_BASE, CATEGORIES, PRIORITIES } from './knowledgeBase.js';
 const client = env.OPENAI_API_KEY
   ? new OpenAI({
       apiKey: env.OPENAI_API_KEY,
-      baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+      baseURL: env.OPENAI_BASE_URL,
     })
   : null;
 if (!client) console.warn('[AI] OPENAI_API_KEY not set — AI features disabled, using rule-based fallback');
