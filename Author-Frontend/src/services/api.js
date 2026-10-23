@@ -1,5 +1,19 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api').replace(/\/$/, '');
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+const API_BASE = (
+  import.meta.env.VITE_API_BASE_URL ||
+  'http://localhost:5000/api'
+).replace(/\/+$/, '');
+
+export const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  'http://localhost:5000';
+
+export class ApiError extends Error {
+  constructor(message, status = 0, payload = null) {
+    super(message);
+    this.status = status;
+    this.payload = payload;
+  }
+}
 
 export class ApiError extends Error {
   constructor(message, status = 0, payload = null) { super(message); this.status = status; this.payload = payload; }
