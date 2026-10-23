@@ -66,10 +66,15 @@ function Login() {
     catch (err) { toastError(err, notify); } finally { setLoading(false); }
   }
   return <main className="login-shell">
-    <div className="login-art"><div className="brand brand-light"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">PUBLISHING SUPPORT</span></span></div>
+    <div className="login-art"><div className="brand brand-light"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">ADMIN PANEL</span></span></div>
       <div className="art-copy"><div className="eyebrow eyebrow-light"><Sparkles size={14}/> SUPPORT OPERATIONS, STREAMLINED</div><h1>Every author deserves<br/><em>great support.</em></h1><p>Triage author requests, review AI-assisted drafts, and resolve publishing queries from one workspace.</p>
         <div className="art-stats"><div><strong>22k+</strong><span>Titles supported</span></div><div><strong>1,200+</strong><span>Books monthly</span></div><div><strong>One place</strong><span>For every question</span></div></div>
-      </div><div className="art-orb orb-one"/><div className="art-orb orb-two"/><div className="art-footer">© {new Date().getFullYear()} BookLeaf Publishing <span>•</span> Admin Operations Portal</div>
+      </div><div className="art-orb orb-one"/><div className="art-orb orb-two"/>
+      <div className="art-footer">
+  © {new Date().getFullYear()} BookLeaf Publishing
+  <span>•</span>
+  Admin Panel
+</div>
     </div>
     <div className="login-side"><div className="login-mobile-brand brand"><span className="brand-mark"><BookOpen size={20}/></span><span>BookLeaf<span className="brand-sub">PUBLISHING SUPPORT</span></span></div>
       <div className="login-card"><div className="login-icon"><ShieldCheck size={23}/></div><div className="eyebrow">SECURE PORTAL</div><h2>Welcome back</h2><p className="muted">Sign in with your BookLeaf administrator account.</p>
@@ -87,9 +92,25 @@ function Login() {
 const authorNav = [
   { label: 'Workspace', items: [{ to: '/author', label: 'Overview', icon: LayoutDashboard }, { to: '/author/books', label: 'My books', icon: BookMarked }, { to: '/author/tickets', label: 'My tickets', icon: MessageSquare }] },
 ];
+
 const adminNav = [
-  { label: 'WORKSPACE', items: [{ to: '/admin', label: 'Overview', icon: LayoutDashboard }, { to: '/admin/tickets', label: 'Ticket queue', icon: Ticket }] },
+  {
+    label: 'ADMIN PANEL',
+    items: [
+      {
+        to: '/admin',
+        label: 'Dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        to: '/admin/tickets',
+        label: 'Support Tickets',
+        icon: Ticket,
+      },
+    ],
+  },
 ];
+
 
 function Shell({ role, children, title, subtitle, actions }) {
   const { session, logout } = useAuth(); const [mobileOpen, setMobileOpen] = useState(false); const location = useLocation(); const navigate = useNavigate();
@@ -98,14 +119,118 @@ function Shell({ role, children, title, subtitle, actions }) {
   const pathActive = (to) => to === `/${role}` ? location.pathname === `/${role}` || location.pathname === `/${role}/` : location.pathname.startsWith(to);
   return <div className="app-shell">
     {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)}/>}
-    <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
-      <div className="sidebar-brand"><span className="brand-mark"><BookOpen size={19}/></span><span className="brand-name">BookLeaf<span className="brand-sub">{isAdmin ? 'OPERATIONS DESK' : 'AUTHOR PORTAL'}</span></span><button className="icon-button sidebar-close" onClick={() => setMobileOpen(false)} aria-label="Close"><X size={17}/></button></div>
-      <div className={`workspace-pill ${isAdmin ? 'workspace-admin' : ''}`}><span className="workspace-dot"/><span>{isAdmin ? 'Operations workspace' : 'Author workspace'}</span><ChevronDown size={14}/></div>
-      {navGroups.map((group) => <div className="nav-group" key={group.label}><div className="nav-label">{group.label}</div>{group.items.map((item) => <button key={item.to} className={`nav-item ${pathActive(item.to) ? 'nav-active' : ''}`} onClick={() => { navigate(item.to); setMobileOpen(false); }}><item.icon size={18}/><span>{item.label}</span>{item.label === 'Ticket queue' && <span className="nav-live-dot"/>}</button>)}</div>)}
-      <div className="sidebar-spacer"/>
-      <div className="sidebar-tip"><div className="tip-icon"><Sparkles size={17}/></div><strong>{isAdmin ? 'AI-assisted support' : 'Need a hand?'}</strong><p>{isAdmin ? 'Review every AI draft before sending a reply.' : 'Create a ticket and our team will help you.'}</p>{!isAdmin && <button onClick={() => navigate('/author/tickets/new')}>Raise a query <ArrowRight size={14}/></button>}</div>
-      <div className="sidebar-bottom"><div className="profile-mini"><div className="avatar">{initials(displayName)}</div><div className="profile-meta"><strong>{displayName}</strong><span>{isAdmin ? 'Administrator' : 'Author account'}</span></div><button className="icon-button" title="Sign out" onClick={logout}><LogOut size={17}/></button></div></div>
-    </aside>
+ 
+<aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
+  {/* Brand */}
+  <div className="sidebar-brand">
+    <span className="brand-mark">
+      <BookOpen size={20} />
+    </span>
+
+    <span className="brand-name">
+      BookLeaf
+      <span className="brand-sub">ADMIN PANEL</span>
+    </span>
+
+    <button
+      className="icon-button sidebar-close"
+      onClick={() => setMobileOpen(false)}
+      aria-label="Close navigation"
+    >
+      <X size={17} />
+    </button>
+  </div>
+
+  {/* Workspace */}
+  <div className="workspace-pill workspace-admin">
+    <span className="workspace-dot" />
+    <span>Admin workspace</span>
+    <ChevronDown size={14} />
+  </div>
+
+  {/* Navigation */}
+  <nav aria-label="Admin navigation">
+    {adminNav.map((group) => (
+      <div className="nav-group" key={group.label}>
+        <div className="nav-label">{group.label}</div>
+
+        {group.items.map((item) => {
+          const active = pathActive(item.to);
+          const Icon = item.icon;
+
+          return (
+            <button
+              key={item.to}
+              type="button"
+              className={`nav-item ${active ? 'nav-active' : ''}`}
+              onClick={() => {
+                navigate(item.to);
+                setMobileOpen(false);
+              }}
+              aria-current={active ? 'page' : undefined}
+            >
+              <Icon size={18} />
+              <span>{item.label}</span>
+
+              {item.label === 'Support Tickets' && (
+                <span className="nav-live-dot" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    ))}
+  </nav>
+
+  <div className="sidebar-spacer" />
+
+  {/* Admin assistance */}
+  <div className="sidebar-tip">
+    <div className="tip-icon">
+      <Sparkles size={17} />
+    </div>
+
+    <strong>AI Support Assistant</strong>
+
+    <p>
+      Review AI-generated drafts, prioritise author requests,
+      and respond to tickets efficiently.
+    </p>
+
+    <button
+      type="button"
+      onClick={() => {
+        navigate('/admin/tickets');
+        setMobileOpen(false);
+      }}
+    >
+      Manage tickets <ArrowRight size={14} />
+    </button>
+  </div>
+
+  {/* Admin profile */}
+  <div className="sidebar-bottom">
+    <div className="profile-mini">
+      <div className="avatar">{initials(displayName)}</div>
+
+      <div className="profile-meta">
+        <strong>{displayName}</strong>
+        <span>Administrator</span>
+      </div>
+
+      <button
+        className="icon-button"
+        type="button"
+        title="Sign out"
+        aria-label="Sign out"
+        onClick={logout}
+      >
+        <LogOut size={17} />
+      </button>
+    </div>
+  </div>
+</aside>
+
     <div className="main-column"><header className="topbar"><div className="topbar-left"><button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu size={20}/></button><div className="breadcrumbs"><span>BookLeaf</span><ChevronRight size={14}/><strong>{title || (isAdmin ? 'Operations' : 'Workspace')}</strong></div></div><div className="topbar-right"><div className="system-status"><span className="status-dot"/> All systems operational</div><button className="icon-button topbar-help" title="Support information"><CircleHelp size={18}/></button><div className="avatar avatar-top">{initials(displayName)}</div></div></header>
       <main className="page-content"><div className="page-heading"><div><div className="eyebrow">{isAdmin ? 'BOOKLEAF OPERATIONS' : 'YOUR PUBLISHING SPACE'}</div><h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div>{actions && <div className="page-actions">{actions}</div>}</div>{children}</main>
       <footer className="app-footer"><span>© {new Date().getFullYear()} BookLeaf Publishing</span><span><span className="footer-dot"/> Secure support workspace</span></footer>
